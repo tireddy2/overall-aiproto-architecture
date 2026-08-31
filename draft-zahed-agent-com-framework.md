@@ -1,7 +1,7 @@
 ---
 title: "AI Agent Interoperable Protocol Framework (AIPF)"
 abbrev: "AIPF"
-docname: draft-zahed-agent-comm-framework-latest
+docname: draft-zahed-agent-com-framework-latest
 category: info
 ipr: trust200902
 area: xxxxx
