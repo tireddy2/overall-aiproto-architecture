@@ -4,8 +4,8 @@ abbrev: "AIPF"
 docname: draft-zahed-agent-com-framework-latest
 category: info
 ipr: trust200902
-area: xxxxx
-workgroup: individual submission
+# area: xxxxx
+# workgroup: individual submission
 submissiontype: IETF
 keyword: Internet-Draft
 stand_alone: yes
@@ -106,12 +106,12 @@ and secure transfer of accumulated task context across agent lifetimes.
 
 This document specifies the AI Agent Interoperable Protocol Framework
 (AIPF), an architectural framework. AIPF addresses the complete lifecycle of an
-inter-domain AI agent-to-agent and agent-to-tools interaction: how agents 
-advertise capabilities and discover peers (the Discovery module), how 
-agents establish verifiable identities, authenticate to each other, and 
+inter-domain AI agent-to-agent and agent-to-tools interaction: how agents
+advertise capabilities and discover peers (the Discovery module), how
+agents establish verifiable identities, authenticate to each other, and
 authorize delegation chains (the Security module), and how agents establish
-low-latency multi-modal communication sessions that survive network 
-interruptions and agent migrations (the Transport Sessions module). 
+low-latency multi-modal communication sessions that survive network
+interruptions and agent migrations (the Transport Sessions module).
 The protocol requirements that AIPF is designed to satisfy are defined in {{I-D.agentic-ai-usecases-requirements}}. This document specifies the architectural framework and building blocks necessary to satisfy those requirements, and identifies applicable existing IETF protocols and areas requiring new protocol work. This document serves both as an architectural reference and as input to the IETF standardization effort for AI agent communication protocols.
 
 MCP {{MCP}} and A2A {{A2A}} are application-layer protocols that are built on top of IETF standards, including HTTP, JSON, OAuth 2.0, and TLS, for their transport and security foundations. These protocols are intended to be complementary rather than competing: MCP focuses on interactions between an agent and its tools, while A2A focuses on horizontal agent-to-agent communication. While both of these protocols are open-source and are broadly adopted, they do not define the infrastructure-level building blocks such as cross-domain discovery, cryptographically verifiable delegation chains, session continuity, and multi-modal transport semantics that Internet-scale agent deployments require. This document analyzes these gaps and identifies existing IETF protocols that are suitable for use, as well as identifying new IETF protocol work that is needed.
@@ -209,7 +209,7 @@ End-to-end security as a baseline, not an option:
   operation. This is not a "security layer" applied on top; it is built
   into the connection establishment procedure itself.
 
-Session-oriented, not request-response-oriented: 
+Session-oriented, not request-response-oriented:
 : Agent communication is inherently long-lived and stateful. Every
   protocol element is designed with the assumption that the task
   context outlives any individual transport connection and is carried
@@ -241,7 +241,7 @@ The use case for orchestrator-driven agent collaboration, including task delegat
 2. **Agent Selection**: The Orchestrator Agent uses discovery protocols to discover
    candidate Sub-agents that have the capabilities required for sub-tasks.
 
-3. **Identity Establishment**: Before connecting, the Orchestrator Agent obtains verifiable credentials for itself and verifies the identity of the target Sub-agent. 
+3. **Identity Establishment**: Before connecting, the Orchestrator Agent obtains verifiable credentials for itself and verifies the identity of the target Sub-agent.
 
 4. **Authorization**: The Orchestrator Agent obtains an OAuth 2.0 delegation token scoped to the sub-task, derived from the original user authorization.
 
@@ -302,7 +302,7 @@ AIPF is organized as a layered protocol stack. Each layer provides guarantees th
                                  |
                                  v
 +---------------------------------------------------------------+
-|                Identity Management                            |  
+|                Identity Management                            |
 |  - Workload Identity Tokens (WIT)                             |
 |  - WIMSE Proof Tokens (WPT)                                   |
 +---------------------------------------------------------------+
@@ -326,9 +326,9 @@ AIPF is organized as a layered protocol stack. Each layer provides guarantees th
 ~~~
 {: #fig-arch title="Reference architecture"}
 
-TLS 1.3 provides channel protection and mutual authentication for all agent communication. When agents communicate directly over QUIC, TLS 1.3 is integrated into the QUIC handshake {{RFC9001}} and does not occupy a discrete layer above or below the transport. In architectures involving intermediaries where TLS is terminated at a proxy, application-layer authentication is required to maintain identity continuity across TLS termination points, as described in {{channel-protection}}. 
+TLS 1.3 provides channel protection and mutual authentication for all agent communication. When agents communicate directly over QUIC, TLS 1.3 is integrated into the QUIC handshake {{RFC9001}} and does not occupy a discrete layer above or below the transport. In architectures involving intermediaries where TLS is terminated at a proxy, application-layer authentication is required to maintain identity continuity across TLS termination points, as described in {{channel-protection}}.
 
-QUIC provides multiplexed streams with per-stream semantics suitable for the heterogeneous communication patterns of agent interactions. MoQT (Media over QUIC Transport) adds a publish/subscribe layer over QUIC for the one-to-many and many-to-many group communication that point-to-point QUIC streams cannot provide. 
+QUIC provides multiplexed streams with per-stream semantics suitable for the heterogeneous communication patterns of agent interactions. MoQT (Media over QUIC Transport) adds a publish/subscribe layer over QUIC for the one-to-many and many-to-many group communication that point-to-point QUIC streams cannot provide.
 
 OAuth 2.0 provides the authorization and delegation framework, enabling agents to obtain and present access tokens scoped to specific tasks. WIMSE provides workload identity for agents through a URI embedded in X.509 certificates at the TLS layer, and through Workload Identity Tokens (WIT) and WIMSE Proof Tokens (WPT) at the application layer. The Agent Session Protocol (ASP) maintains context continuity, a stable context identifier and integrity verification across connection changes, including endpoint migration. Connection-level continuity is provided by QUIC Connection ID and TLS resumption. Agents interact at the top of the stack, each acting on behalf of a user or system.
 
@@ -369,7 +369,7 @@ These identity requirements are satisfied by using WIMSE Workload Credentials [I
 ## Channel Protection {#channel-protection}
 
 All agent communication is required to be encrypted and mutually authenticated. AIPF does not define a fallback to cleartext or unauthenticated operation.
-Authentication may operate at the transport layer, the application layer, or both. Transport-layer authentication works well when TLS connections are not terminated by intermediaries. In architectures involving proxies, application-layer authentication is required to maintain identity continuity across TLS termination points. The channel protection mechanism is required to be negotiated during session establishment, with both endpoints authenticating before any task state or authorization token is exchanged. 
+Authentication may operate at the transport layer, the application layer, or both. Transport-layer authentication works well when TLS connections are not terminated by intermediaries. In architectures involving proxies, application-layer authentication is required to maintain identity continuity across TLS termination points. The channel protection mechanism is required to be negotiated during session establishment, with both endpoints authenticating before any task state or authorization token is exchanged.
 
 ## Intent-Execution Separation {#intent-execution}
 
@@ -383,9 +383,9 @@ When one agent delegates a sub-task to another, the receiving agent is authorize
 
 Agents act on behalf of users or other agents across multiple hops and
 administrative domains. Audit requires that each action be traceable to the
-principal that authorized it and the agent that executed it. For Non-repudiation, 
-this traceability is required to be cryptographically verifiable, so that 
-no party can later deny its role. The mechanism for recording and 
+principal that authorized it and the agent that executed it. For Non-repudiation,
+this traceability is required to be cryptographically verifiable, so that
+no party can later deny its role. The mechanism for recording and
 verifying it is outside the scope of this framework.
 
 # Transport protocols Aspects {#transport}
@@ -437,13 +437,13 @@ Context continuity is required to provide a persistent context identifier, a rec
 # Applicability of Existing IETF Work {#existingworks}
 ## Reuse As-Is
 
-* TLS 1.3 {{!RFC8446}} provides mutual authentication and channel protection. Agents 
+* TLS 1.3 {{!RFC8446}} provides mutual authentication and channel protection. Agents
   are required to negotiate TLS 1.3 or higher.
-* QUIC {{!RFC9000}} and QUIC-TLS {{!RFC9001}} provide multiplexed streams and 0-RTT 
-  session resumption. 
+* QUIC {{!RFC9000}} and QUIC-TLS {{!RFC9001}} provide multiplexed streams and 0-RTT
+  session resumption.
 * OAuth 2.0 Token Exchange {{RFC8693}} provides the base token exchange mechanism.
 * WIMSE Workload Credentials {{I-D.ietf-wimse-workload-creds}} are reused for agent
-  identity; see {{agent-identity}}. 
+  identity; see {{agent-identity}}.
 
 ## Profile or Extend
 
