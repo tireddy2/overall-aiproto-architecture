@@ -127,6 +127,9 @@ Dialog:
 Dialog Context:
 : TBD.
 
+Dialog Identifier:
+: TBD.  
+
 Intermediary:
 : An entity that relays or processes messages between dialog participants.
 
@@ -272,8 +275,8 @@ by the Security layer.
 | +-----------------+  +-----------------+  +-----------------+ |
 | | Dialog          |  | Authorization   |  | Identity        | |
 | |                 |  | and Delegation  |  | Management      | |
-| | - Dialog        |  |                 |  |                 | |
-| |   Identifier    |  | - OAuth 2.0     |  | - WIT, WPT      | |
+| | - Context       |  |                 |  |                 | |
+| | - Identifier    |  | - OAuth 2.0     |  | - WIT, WPT      | |
 | +-----------------+  +-----------------+  +-----------------+ |
 +---------------------------------------------------------------+
                                  |
